@@ -1,0 +1,17 @@
+import { Link } from 'react-router-dom';
+export const GoBackLink = ({ path }) => {
+  return (
+    <div
+      style={{
+        marginBottom: '60px',
+        color: '#f2f2f2',
+        letterSpacing: '0.06em',
+        textDecoration: 'underline',
+
+        borderColor: 'gray',
+      }}
+    >
+      <Link to={path}>Back to Countries</Link>
+    </div>
+  );
+};
