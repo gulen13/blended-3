@@ -2,7 +2,6 @@ import {
   Container,
   SearchForm,
   Section,
-  Heading,
   Loader,
   CountryList,
 } from 'components';
@@ -13,13 +12,18 @@ import { fetchByRegion } from 'service/country-service';
 export const CountrySearch = () => {
   const [countries, setCountries] = useState([]);
   const [searchParams, setSeachParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const region = searchParams.get('region');
     if (!region) {
       return;
     }
-    fetchByRegion(region).then(setCountries);
+    fetchByRegion(region)
+      .then(setCountries)
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [searchParams]);
 
   const onSubmit = region => {
@@ -31,6 +35,7 @@ export const CountrySearch = () => {
       <Container>
         <SearchForm onSubmit={onSubmit} />
         <CountryList countries={countries} />
+        {isLoading && <Loader />}
       </Container>
     </Section>
   );

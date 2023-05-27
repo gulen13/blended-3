@@ -1,14 +1,25 @@
-import { Section, Container, CountryInfo, Loader } from 'components';
+import {
+  Section,
+  Container,
+  CountryInfo,
+  Loader,
+  GoBackLink,
+} from 'components';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { fetchCountry } from 'service/country-service';
 
 export const Country = () => {
   const { countryId } = useParams();
   const [country, setCountry] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
   useEffect(() => {
-    fetchCountry(countryId).then(setCountry);
+    fetchCountry(countryId)
+      .then(setCountry)
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [countryId]);
 
   if (!country) {
@@ -17,7 +28,9 @@ export const Country = () => {
   return (
     <Section>
       <Container>
+        <GoBackLink path={location?.state?.from ?? '/'} />
         <CountryInfo {...country} />
+        {isLoading && <Loader />}
       </Container>
     </Section>
   );
